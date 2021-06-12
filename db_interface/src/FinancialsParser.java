@@ -1,0 +1,79 @@
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.File;
+import java.util.Scanner;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class FinancialsParser {
+    private final Map<String, List<String>> data_; // карта названий столбцов и списков данных по столбцам
+
+    public FinancialsParser() {
+        data_ = new HashMap<>();
+    }
+
+    public void read(String company) {
+        String regex1 = "(?<=\\w\\)?|^),(?=\\w)|,\\\"|\\\",";
+        String regex2 = "\\d{4}-\\d{2}-\\d{2}|(?<=,\").[^\"]+(?=\",)|(?<=,)\\$?-?\\d+\\.?\\d*(?=,|$)|(?<=,)-(?=,|$)";
+        String[] paths = new String[4];
+
+        paths[0] = "balance-sheet/";
+        paths[1] = "cash-flow-statement/";
+        paths[2] = "financial-ratios/";
+        paths[3] = "income-statement/";
+
+        for (String folder: paths) { // чтение таблиц
+            String filePath = "c:/it/java/final/data/" + folder + company + ".csv";
+
+            try {
+                File fl = new File(filePath);
+                byte[] fileContent = Files.readAllBytes(fl.toPath());
+
+                String string = new String(fileContent, StandardCharsets.US_ASCII); // компоновка файла в одну строку
+                Scanner scanner = new Scanner(string);
+                String[] keys = scanner.nextLine().split(regex1); // сканнер первой строки (названия столбцов)
+
+                for (int i = 0; i < keys.length; i++) { // формирование ключей
+                    String key = keys[i].trim();
+
+                    if (key.length() == 0)
+                        key = "Date";
+
+                    keys[i] = key;
+
+                    if (!data_.containsKey(key)) { // присваивание ключей карте
+                        List<String> lst = new ArrayList<>();
+                        data_.put(key, lst);
+                    }
+                } // чтение первой строки и формирование ключей карты
+
+                List<String> words; // контейнер для данных из всех остальных строк
+
+                while (scanner.hasNext()) { // сканнер остальных строк
+                    words = new ArrayList<>();
+                    Matcher matcher = Pattern.compile(regex2).matcher(scanner.nextLine());
+
+                    while (matcher.find()) { // чтение строки
+                        words.add(matcher.group());
+                    }
+
+                    if (words.isEmpty())
+                        break;
+                    for (int i = 0; i < words.size(); i++) // компоновка ключей и списков в карту
+                        data_.get(keys[i]).add(words.get(i));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Map<String, List<String>> getParsed() {
+        return data_;
+    }
+}

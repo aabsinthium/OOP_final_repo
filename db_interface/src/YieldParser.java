@@ -1,23 +1,26 @@
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
 import java.io.File;
-import java.util.Scanner;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.io.IOException;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Parser {
+public class YieldParser {
     private final Map<String, List<String>> data_;
 
-    public Parser() {
+    public YieldParser() {
         data_ = new HashMap<>();
     }
 
-    public void read(String fileName) {
+    public void read(String company) {
+        String fileName = company + ".csv";
+        String[] paths = new String[4];
+        paths[0] = "balance-sheet";
+        paths[1] = "cash-flow-statement";
+        paths[2] = "financial-ratios";
+        paths[3] = "income-statement";
+
         try {
             File fl = new File(fileName);
             byte[] fileContent = Files.readAllBytes(fl.toPath());   
