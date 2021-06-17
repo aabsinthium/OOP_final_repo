@@ -18,42 +18,38 @@ public class Gui {
     private JTextField gui_close;
 
     public Gui() {
-        // создание
+        // создание контейнеров для хранения статуса
         CBStatus cbstatus_pe = new CBStatus("PE");
         CBStatus cbstatus_pb = new CBStatus("PB");
         CBStatus cbstatus_ps = new CBStatus("PS");
         CBStatus cbstatus_cr = new CBStatus("CR");
         CBStatus cbstatus_roe = new CBStatus("ROE");
 
-
+        // создание слушателей для чекбоксов
         gui_pe.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                cbstatus_pe.changeStatus();
+                cbstatus_pe.changeStatus(); // изменения статуса по нажатию на чекбокс
             }
         });
-
         gui_pb.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 cbstatus_pb.changeStatus();
             }
         });
-
         gui_ps.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 cbstatus_ps.changeStatus();
             }
         });
-
         gui_cr.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 cbstatus_cr.changeStatus();
             }
         });
-
         gui_roe.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -61,10 +57,13 @@ public class Gui {
             }
         });
 
-
+        // UNFINISHED
+        // формирование и отправка итогового запроса
         request_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // прописать отправку запроса парсеру на вычисление и формирование таблицы
+
                 JOptionPane.showMessageDialog(null, cbstatus_pe.sendStatus().get("PE"));
                 JOptionPane.showMessageDialog(null, cbstatus_pb.sendStatus().get("PB"));
                 JOptionPane.showMessageDialog(null, cbstatus_ps.sendStatus().get("PS"));
@@ -81,17 +80,20 @@ public class Gui {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
 
+        // UNFINISHED
+        // что-то придумать с датой
+        // прописать форматирование данных
+        // (убрать лишние символы, привести к единому виду, убрать запятые, разделяющие тысячи)
+        FinancialsParser financials_parser = new FinancialsParser();
+        financials_parser.read("A");
 
-        Parser parser = new Parser();
-        parser.read("A.csv");
-
-        Map<String, List<String>> data = parser.getParsed();
+        Map<String, List<String>> data = financials_parser.getParsed();
 
         for (String key : data.keySet()){
             System.out.println(key);
         }
 
-        for (String element : data.get("Date")){
+        for (String element : data.get("Gross Profit")){
             System.out.println(element);
         }
     }
