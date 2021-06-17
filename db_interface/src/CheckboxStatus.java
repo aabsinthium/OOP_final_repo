@@ -1,13 +1,11 @@
 import java.util.HashMap;
 
 // контейнер для записи выбранных мультипликаторов
-public class CBStatus {
-    // имя мультипликатора
-    private final String feature_;
-    // карта, хранящая имя мультипликатора и статус выбора (true/false)
-    private final HashMap<String, Boolean> status_;
+public class CheckboxStatus {
+    private final String feature_; // имя мультипликатора
+    private final HashMap<String, Boolean> status_; // карта имени и статуса выбора (true/false)
 
-    public CBStatus(String feature){
+    public CheckboxStatus(String feature){
         feature_ = feature; // присваивание имени мультипликатора из параметра конструктора
         status_ = new HashMap<>();
         status_.put(feature, false); // дефолтное присваивание статуса false (не выбран)

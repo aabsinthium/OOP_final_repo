@@ -10,15 +10,16 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FinancialsParser {
+public class FinancialsParser extends Parser{
     private final Map<String, List<String>> data_; // карта названий столбцов и списков данных по столбцам
 
     public FinancialsParser() {
         data_ = new HashMap<>();
     }
 
+    @Override
     public void read(String company) {
-        String regex1 = "(?<=\\w\\)?|^),(?=\\w)|,\\\"|\\\",";
+        String regex1 = "(?<=\\w\\)?|^),(?=\\w)|,\"|\",";
         String regex2 = "\\d{4}-\\d{2}-\\d{2}|(?<=,\").[^\"]+(?=\",)|(?<=,)\\$?-?\\d+\\.?\\d*(?=,|$)|(?<=,)-(?=,|$)";
         String[] paths = new String[4];
 
@@ -73,6 +74,7 @@ public class FinancialsParser {
         }
     }
 
+    @Override
     public Map<String, List<String>> getParsed() {
         return data_;
     }

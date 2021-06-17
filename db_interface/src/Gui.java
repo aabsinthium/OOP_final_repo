@@ -19,11 +19,11 @@ public class Gui {
 
     public Gui() {
         // создание контейнеров для хранения статуса
-        CBStatus cbstatus_pe = new CBStatus("PE");
-        CBStatus cbstatus_pb = new CBStatus("PB");
-        CBStatus cbstatus_ps = new CBStatus("PS");
-        CBStatus cbstatus_cr = new CBStatus("CR");
-        CBStatus cbstatus_roe = new CBStatus("ROE");
+        CheckboxStatus cbstatus_pe = new CheckboxStatus("PE");
+        CheckboxStatus cbstatus_pb = new CheckboxStatus("PB");
+        CheckboxStatus cbstatus_ps = new CheckboxStatus("PS");
+        CheckboxStatus cbstatus_cr = new CheckboxStatus("CR");
+        CheckboxStatus cbstatus_roe = new CheckboxStatus("ROE");
 
         // создание слушателей для чекбоксов
         gui_pe.addItemListener(new ItemListener() {
