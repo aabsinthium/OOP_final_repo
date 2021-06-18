@@ -29,7 +29,7 @@ public class FinancialsParser extends Parser{
         paths[3] = "income-statement/";
 
         for (String folder: paths) { // чтение таблиц
-            String filePath = "c:/it/java/final/data/" + folder + company + ".csv";
+            String filePath = "../data/" + folder + company + ".csv";
 
             try {
                 File fl = new File(filePath);
@@ -65,10 +65,15 @@ public class FinancialsParser extends Parser{
 
                     if (words.isEmpty())
                         break;
-                    for (int i = 0; i < words.size(); i++) // компоновка ключей и списков в карту
+                    for (int i = 0; i < words.size(); i++){
+                        if(i == 0 && !folder.equals(paths[0])) // пропуск столбца с датами в таблицах кроме первой
+                            continue;
+
                         data_.get(keys[i]).add(words.get(i));
+                    } // компоновка ключей и списков в карту
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }

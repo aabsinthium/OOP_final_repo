@@ -85,15 +85,19 @@ public class Gui {
         // прописать форматирование данных
         // (убрать лишние символы, привести к единому виду, убрать запятые, разделяющие тысячи)
         FinancialsParser financials_parser = new FinancialsParser();
+        YieldParser yield_parser = new YieldParser();
+
         financials_parser.read("A");
+        yield_parser.read("A");
 
-        Map<String, List<String>> data = financials_parser.getParsed();
+        DateMerger merger = new DateMerger(financials_parser.getParsed(), yield_parser.getParsed());
+        Map<String, List<String>> data = merger.merge();
 
-        for (String key : data.keySet()){
-            System.out.println(key);
+        for (String element : data.get("Date")){
+            System.out.println(element);
         }
 
-        for (String element : data.get("Gross Profit")){
+        for (String element : data.get("Price")){
             System.out.println(element);
         }
     }

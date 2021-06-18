@@ -1,11 +1,11 @@
 import java.util.*;
 
 abstract class MultiplierColumn {
-    private final List<Double> data_;
+    private final List<Double> column_;
 
     public MultiplierColumn(){
-        this.data_ = new ArrayList<>();
+        this.column_ = new ArrayList<>();
     }
 
-    abstract List calculateValue();
+    abstract List calculateValue(Map<String, List<String>> data);
 }
