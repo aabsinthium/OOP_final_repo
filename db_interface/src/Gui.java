@@ -87,18 +87,17 @@ public class Gui {
         FinancialsParser financials_parser = new FinancialsParser();
         YieldParser yield_parser = new YieldParser();
 
-        financials_parser.read("A");
-        yield_parser.read("A");
+        financials_parser.read("AAPL");
+        yield_parser.read("AAPL");
 
         DateMerger merger = new DateMerger(financials_parser.getParsed(), yield_parser.getParsed());
         Map<String, List<String>> data = merger.merge();
 
-        for (String element : data.get("Date")){
-            System.out.println(element);
-        }
-
-        for (String element : data.get("Price")){
-            System.out.println(element);
+        for(int i = 0; i < data.get("Date").size(); i += 1){
+            System.out.println(
+                    data.get("Price").get(i) + " " +
+                    data.get("Shares Outstanding").get(i) + " " +
+                    data.get("Net Income").get(i));
         }
     }
 }

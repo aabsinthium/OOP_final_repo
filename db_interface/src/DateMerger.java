@@ -38,6 +38,9 @@ public class DateMerger {
             if(Integer.parseInt(year) % 4 == 0 && month.equals("Mar")) // високосный год
                 month += "+";
 
+            if(month.equals("Jan")) // перенос с января на декабрь
+                year = Integer.toString(Integer.parseInt(year) - 1);
+
             String date_str = year;
             date_str += months_.get(month);
 
