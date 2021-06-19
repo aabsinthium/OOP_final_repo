@@ -1,11 +1,15 @@
 import java.util.*;
 
 abstract class MultiplierColumn {
-    private final List<Double> column_;
+    private final String regex_;
+    private final List<String> column_;
+    private final Map<String, List<String>> data_;
 
-    public MultiplierColumn(){
+    public MultiplierColumn(Map<String, List<String>> data, String regex){
+        this.data_ = data;
+        this.regex_ = regex;
         this.column_ = new ArrayList<>();
     }
 
-    abstract List calculateValue(Map<String, List<String>> data);
+    abstract List calculateValue();
 }

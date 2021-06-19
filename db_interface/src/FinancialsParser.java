@@ -57,7 +57,8 @@ public class FinancialsParser extends Parser{
 
                 while (scanner.hasNext()) { // сканнер остальных строк
                     words = new ArrayList<>();
-                    Matcher matcher = Pattern.compile(regex2).matcher(scanner.nextLine());
+                    Pattern pattern = Pattern.compile(regex2);
+                    Matcher matcher = pattern.matcher(scanner.nextLine());
 
                     while (matcher.find()) { // чтение строки
                         words.add(matcher.group());
