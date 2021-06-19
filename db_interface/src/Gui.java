@@ -80,10 +80,6 @@ public class Gui {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
 
-        // UNFINISHED
-        // что-то придумать с датой
-        // прописать форматирование данных
-        // (убрать лишние символы, привести к единому виду, убрать запятые, разделяющие тысячи)
         FinancialsParser financials_parser = new FinancialsParser();
         YieldParser yield_parser = new YieldParser();
 
@@ -93,19 +89,16 @@ public class Gui {
         DateMerger merger = new DateMerger(financials_parser.getParsed(), yield_parser.getParsed());
         Map<String, List<String>> data = merger.merge();
 
+        // UNFINISHED
+        PEColumn pec = new PEColumn(data, "(?<=\\$).[^\"]+");
+        List<String> pe = pec.calculateValue();
+
         for(int i = 0; i < data.get("Date").size(); i += 1){
             System.out.println(
                     data.get("Date").get(i) + "   " +
                     data.get("Price").get(i) + "   " +
-                    data.get("Net Income").get(i) + "   " +
-                    data.get("Shares Outstanding").get(i) + "   " +
-                    data.get("EPS - Earnings Per Share").get(i));
+                    data.get("EPS - Earnings Per Share").get(i) + "   " +
+                    pe.get(i));
         }
-
-        PEColumn pec = new PEColumn(data, "(?<=\\$).[^\"]+");
-        List<String> pe = pec.calculateValue();
-
-        for(String e : pe)
-            System.out.println(e);
     }
 }
