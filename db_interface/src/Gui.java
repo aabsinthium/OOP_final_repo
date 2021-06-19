@@ -9,51 +9,53 @@ import java.util.Map;
 public class Gui {
     private JPanel panel1;
     private JButton request_button;
-    private JCheckBox gui_pe;
-    private JCheckBox gui_pb;
-    private JCheckBox gui_ps;
-    private JCheckBox gui_cr;
-    private JCheckBox gui_roe;
+    private JCheckBox pe_listener;
+    private JCheckBox pb_listener;
+    private JCheckBox ps_listener;
+    private JCheckBox cr_listener;
+    private JCheckBox roe_listener;
     private JTextField gui_open;
     private JTextField gui_close;
 
+    // добвить кнопку сохранения файла
+
     public Gui() {
         // создание контейнеров для хранения статуса
-        CheckboxStatus cbstatus_pe = new CheckboxStatus("PE");
-        CheckboxStatus cbstatus_pb = new CheckboxStatus("PB");
-        CheckboxStatus cbstatus_ps = new CheckboxStatus("PS");
-        CheckboxStatus cbstatus_cr = new CheckboxStatus("CR");
-        CheckboxStatus cbstatus_roe = new CheckboxStatus("ROE");
+        CheckboxStatus pe_status = new CheckboxStatus("PE");
+        CheckboxStatus pb_status = new CheckboxStatus("PB");
+        CheckboxStatus ps_status = new CheckboxStatus("PS");
+        CheckboxStatus cr_status = new CheckboxStatus("CR");
+        CheckboxStatus roe_status = new CheckboxStatus("ROE");
 
         // создание слушателей для чекбоксов
-        gui_pe.addItemListener(new ItemListener() {
+        pe_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                cbstatus_pe.changeStatus(); // изменения статуса по нажатию на чекбокс
+                pe_status.changeStatus(); // изменения статуса по нажатию на чекбокс
             }
         });
-        gui_pb.addItemListener(new ItemListener() {
+        pb_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                cbstatus_pb.changeStatus();
+                pb_status.changeStatus();
             }
         });
-        gui_ps.addItemListener(new ItemListener() {
+        ps_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                cbstatus_ps.changeStatus();
+                ps_status.changeStatus();
             }
         });
-        gui_cr.addItemListener(new ItemListener() {
+        cr_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                cbstatus_cr.changeStatus();
+                cr_status.changeStatus();
             }
         });
-        gui_roe.addItemListener(new ItemListener() {
+        roe_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                cbstatus_roe.changeStatus();
+                roe_status.changeStatus();
             }
         });
 
@@ -62,13 +64,37 @@ public class Gui {
         request_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                FinancialsParser financials_parser = new FinancialsParser();
+                YieldParser yield_parser = new YieldParser();
+
+                financials_parser.read("AAPL");
+                yield_parser.read("AAPL");
+
+                DateMerger merger = new DateMerger(financials_parser.getParsed(), yield_parser.getParsed());
+                Map<String, List<String>> data = merger.merge();
+
+
                 // прописать отправку запроса парсеру на вычисление и формирование таблицы
 
-                JOptionPane.showMessageDialog(null, cbstatus_pe.sendStatus().get("PE"));
-                JOptionPane.showMessageDialog(null, cbstatus_pb.sendStatus().get("PB"));
-                JOptionPane.showMessageDialog(null, cbstatus_ps.sendStatus().get("PS"));
-                JOptionPane.showMessageDialog(null, cbstatus_cr.sendStatus().get("CR"));
-                JOptionPane.showMessageDialog(null, cbstatus_roe.sendStatus().get("ROE"));
+                if(pe_status.getStatus()){
+                    PEColumn pec = new PEColumn(data, "(?<=\\$).[^\"]+");
+                    List<String> pe = pec.calculateValue();
+
+                    for(int i = 0; i < data.get("Date").size(); i += 1){
+                        System.out.println(
+                            data.get("Date").get(i) + "   " +
+                            pe.get(i));
+                    }
+                }
+
+
+                /*
+                JOptionPane.showMessageDialog(null, pe_status.sendStatus().get("PE"));
+                JOptionPane.showMessageDialog(null, pb_status.sendStatus().get("PB"));
+                JOptionPane.showMessageDialog(null, ps_status.sendStatus().get("PS"));
+                JOptionPane.showMessageDialog(null, cr_status.sendStatus().get("CR"));
+                JOptionPane.showMessageDialog(null, roe_status.sendStatus().get("ROE"));
+                 */
             }
         });
     }
@@ -79,26 +105,5 @@ public class Gui {
         frame.setContentPane(new Gui().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-
-        FinancialsParser financials_parser = new FinancialsParser();
-        YieldParser yield_parser = new YieldParser();
-
-        financials_parser.read("AAPL");
-        yield_parser.read("AAPL");
-
-        DateMerger merger = new DateMerger(financials_parser.getParsed(), yield_parser.getParsed());
-        Map<String, List<String>> data = merger.merge();
-
-        // UNFINISHED
-        PEColumn pec = new PEColumn(data, "(?<=\\$).[^\"]+");
-        List<String> pe = pec.calculateValue();
-
-        for(int i = 0; i < data.get("Date").size(); i += 1){
-            System.out.println(
-                    data.get("Date").get(i) + "   " +
-                    data.get("Price").get(i) + "   " +
-                    data.get("EPS - Earnings Per Share").get(i) + "   " +
-                    pe.get(i));
-        }
     }
 }

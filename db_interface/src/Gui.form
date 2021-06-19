@@ -7,7 +7,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="5dcaf" class="javax.swing.JCheckBox" binding="gui_pe">
+      <component id="5dcaf" class="javax.swing.JCheckBox" binding="pe_listener">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
@@ -16,7 +16,7 @@
           <text value="PE"/>
         </properties>
       </component>
-      <component id="4b3ed" class="javax.swing.JCheckBox" binding="gui_pb">
+      <component id="4b3ed" class="javax.swing.JCheckBox" binding="pb_listener">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
@@ -25,7 +25,7 @@
           <text value="PB"/>
         </properties>
       </component>
-      <component id="7d5fb" class="javax.swing.JCheckBox" binding="gui_ps">
+      <component id="7d5fb" class="javax.swing.JCheckBox" binding="ps_listener">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
@@ -34,7 +34,7 @@
           <text value="PS"/>
         </properties>
       </component>
-      <component id="db49e" class="javax.swing.JCheckBox" binding="gui_cr">
+      <component id="db49e" class="javax.swing.JCheckBox" binding="cr_listener">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
@@ -43,7 +43,7 @@
           <text value="CR"/>
         </properties>
       </component>
-      <component id="d83bc" class="javax.swing.JCheckBox" binding="gui_roe">
+      <component id="d83bc" class="javax.swing.JCheckBox" binding="roe_listener">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>

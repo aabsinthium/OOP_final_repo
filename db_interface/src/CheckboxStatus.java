@@ -1,23 +1,22 @@
-import java.util.HashMap;
+import java.util.*;
 
 // контейнер для записи выбранных мультипликаторов
 public class CheckboxStatus {
     private final String feature_; // имя мультипликатора
-    private final HashMap<String, Boolean> status_; // карта имени и статуса выбора (true/false)
+    private boolean status_; // карта имени и статуса выбора (true/false)
 
     public CheckboxStatus(String feature){
         feature_ = feature; // присваивание имени мультипликатора из параметра конструктора
-        status_ = new HashMap<>();
-        status_.put(feature, false); // дефолтное присваивание статуса false (не выбран)
+        status_ = false;
     }
 
     // смена статуса (метод вызывается при нажатии на чекбокс)
     public void changeStatus(){
-        status_.replace(feature_, !status_.get(feature_));
+        status_ = !status_;
     }
 
     // возврат статуса при формировании запроса
-    public HashMap<String, Boolean> sendStatus(){
+    public boolean getStatus(){
         return status_;
     }
 }
