@@ -6,10 +6,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class YieldParser extends Parser{
+public class ParserYield extends Parser{
     private final Map<String, List<String>> data_;
 
-    public YieldParser() {
+    public ParserYield() {
         data_ = new HashMap<>();
     }
 

@@ -1,13 +1,13 @@
 import java.util.*;
 
-abstract class MultiplierColumn {
+abstract class Column {
     private final String regex_;
     private final List<String> column_;
     private final Map<String, List<String>> data_;
 
-    public MultiplierColumn(Map<String, List<String>> data, String regex){
+    public Column(Map<String, List<String>> data){
         this.data_ = data;
-        this.regex_ = regex;
+        this.regex_ = "[^\"$]+";
         this.column_ = new ArrayList<>();
     }
 

@@ -1,27 +1,29 @@
-import java.util.*;
 import java.text.*;
+import java.util.*;
 import java.util.regex.*;
 
-public class PEColumn extends MultiplierColumn{
+public class ColumnPB extends Column{
     private final String regex_;
     private final List<String> column_;
     private final Map<String, List<String>> data_;
 
-    public PEColumn(Map<String, List<String>> data, String regex){
-        super(data, regex);
+    public ColumnPB(Map<String, List<String>> data){
+        super(data);
         this.data_ = data;
-        this.regex_ = regex;
+        this.regex_ = "[^\"$]+";
         this.column_ = new ArrayList<>();
     }
 
     @Override
     public List calculateValue(){
-        List<String> eps_str = data_.get("EPS - Earnings Per Share");
         List<String> price_str = data_.get("Price");
+        List<String> shares_str = data_.get("Shares Outstanding"); // income-statement
+        List<String> assets_str = data_.get("Total Assets"); // balance-sheet
+        List<String> liabilities_str = data_.get("Total Liabilities"); // balance-sheet
 
         NumberFormat nf = NumberFormat.getInstance(Locale.US);
 
-        for(int i = 0; i < eps_str.size(); i += 1){
+        for(int i = 0; i < shares_str.size(); i += 1){
             double eps = 0;
             boolean b = true;
             Double price;
@@ -30,7 +32,7 @@ public class PEColumn extends MultiplierColumn{
 
             try {
                 for (int j = 0; j < 4; j += 1) {
-                    Matcher eps_matcher = pattern.matcher(eps_str.get(i + j));
+                    Matcher eps_matcher = pattern.matcher(shares_str.get(i + j));
 
                     if (eps_matcher.find()) {
                         try {
@@ -79,4 +81,5 @@ public class PEColumn extends MultiplierColumn{
 
         return column_;
     }
+
 }

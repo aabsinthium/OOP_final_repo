@@ -62,8 +62,8 @@ public class Gui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // прописать отправку запроса парсеру на вычисление и формирование таблицы
-                Request request = new Request("", "");
-                request.formRequest(status.getStatus());
+                Request request = new Request(status.getStatus());
+                request.formRequest();
                 request.getFile();
 
 

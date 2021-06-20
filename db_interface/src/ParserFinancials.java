@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FinancialsParser extends Parser{
+public class ParserFinancials extends Parser{
     private final Map<String, List<String>> data_; // карта названий столбцов и списков данных по столбцам
 
-    public FinancialsParser() {
+    public ParserFinancials() {
         data_ = new HashMap<>();
     }
 
