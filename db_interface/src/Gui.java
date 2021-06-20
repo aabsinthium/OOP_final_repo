@@ -21,41 +21,38 @@ public class Gui {
 
     public Gui() {
         // создание контейнеров для хранения статуса
-        CheckboxStatus pe_status = new CheckboxStatus("PE");
-        CheckboxStatus pb_status = new CheckboxStatus("PB");
-        CheckboxStatus ps_status = new CheckboxStatus("PS");
-        CheckboxStatus cr_status = new CheckboxStatus("CR");
-        CheckboxStatus roe_status = new CheckboxStatus("ROE");
+        String[] checkboxes = {"PE", "PB", "PS", "CR", "ROE"};
+        CheckboxStatus status = new CheckboxStatus(checkboxes);
 
         // создание слушателей для чекбоксов
         pe_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                pe_status.changeStatus(); // изменения статуса по нажатию на чекбокс
+                status.changeStatus("PE"); // изменения статуса по нажатию на чекбокс
             }
         });
         pb_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                pb_status.changeStatus();
+                status.changeStatus("PB");
             }
         });
         ps_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                ps_status.changeStatus();
+                status.changeStatus("PS");
             }
         });
         cr_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                cr_status.changeStatus();
+                status.changeStatus("CR");
             }
         });
         roe_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                roe_status.changeStatus();
+                status.changeStatus("ROE");
             }
         });
 
@@ -64,28 +61,11 @@ public class Gui {
         request_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FinancialsParser financials_parser = new FinancialsParser();
-                YieldParser yield_parser = new YieldParser();
-
-                financials_parser.read("AAPL");
-                yield_parser.read("AAPL");
-
-                DateMerger merger = new DateMerger(financials_parser.getParsed(), yield_parser.getParsed());
-                Map<String, List<String>> data = merger.merge();
-
-
                 // прописать отправку запроса парсеру на вычисление и формирование таблицы
+                Request request = new Request("", "");
+                request.formRequest(status.getStatus());
+                request.getFile();
 
-                if(pe_status.getStatus()){
-                    PEColumn pec = new PEColumn(data, "(?<=\\$).[^\"]+");
-                    List<String> pe = pec.calculateValue();
-
-                    for(int i = 0; i < data.get("Date").size(); i += 1){
-                        System.out.println(
-                            data.get("Date").get(i) + "   " +
-                            pe.get(i));
-                    }
-                }
 
 
                 /*
