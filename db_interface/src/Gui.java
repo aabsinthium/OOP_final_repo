@@ -3,19 +3,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.List;
-import java.util.Map;
 
 public class Gui {
     private JPanel panel1;
-    private JButton request_button;
     private JCheckBox pe_listener;
     private JCheckBox pb_listener;
     private JCheckBox ps_listener;
     private JCheckBox cr_listener;
     private JCheckBox roe_listener;
-    private JTextField gui_open;
-    private JTextField gui_close;
+    private JButton form_button;
+    private JButton send_button;
 
     // добвить кнопку сохранения файла
 
@@ -23,6 +20,7 @@ public class Gui {
         // создание контейнеров для хранения статуса
         String[] checkboxes = {"PE", "PB", "PS", "CR", "ROE"};
         CheckboxStatus status = new CheckboxStatus(checkboxes);
+        Request request = new Request();
 
         // создание слушателей для чекбоксов
         pe_listener.addItemListener(new ItemListener() {
@@ -58,15 +56,11 @@ public class Gui {
 
         // UNFINISHED
         // формирование и отправка итогового запроса
-        request_button.addActionListener(new ActionListener() {
+        form_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // прописать отправку запроса парсеру на вычисление и формирование таблицы
-                Request request = new Request(status.getStatus());
-                request.formRequest();
-                request.getFile();
-
-
+                request.formRequest(status.getStatus());
 
                 /*
                 JOptionPane.showMessageDialog(null, pe_status.sendStatus().get("PE"));
@@ -75,6 +69,13 @@ public class Gui {
                 JOptionPane.showMessageDialog(null, cr_status.sendStatus().get("CR"));
                 JOptionPane.showMessageDialog(null, roe_status.sendStatus().get("ROE"));
                  */
+            }
+        });
+
+        send_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                request.getFile();
             }
         });
     }
