@@ -16,12 +16,40 @@ public class ColumnPE extends Column {
 
     @Override
     public List calculateValue(){
+        List<String> data_price = data_.get("Price");
+        List<String> data_eps = data_.get("EPS - Earnings Per Share");
+
+        NumberFormat nf = NumberFormat.getInstance(Locale.US);
+
+        for(int i = 0; i < data_.get("Date").size(); i += 1) {
+            String pe;
+            Pattern pattern = Pattern.compile(regex_);
+            QtrToYear counter = new QtrToYear();
+
+            String price_str = counter.count(i, 1, pattern, data_price);
+            String eps_str = counter.count(i, 4, pattern, data_eps);
+
+            try {
+                double price = Double.parseDouble(price_str);
+                double eps = Double.parseDouble(eps_str);
+
+                pe = String.format("%.2f", (price / eps));
+            }
+            catch (NumberFormatException e) {
+                pe = "nan";
+            }
+
+            column_.add(pe);
+        }
+        return column_;
+
+        /*
         List<String> eps_str = data_.get("EPS - Earnings Per Share");
         List<String> price_str = data_.get("Price");
 
         NumberFormat nf = NumberFormat.getInstance(Locale.US);
 
-        for(int i = 0; i < eps_str.size(); i += 1){
+        for(int i = 0; i < data_.get("Date").size(); i += 1){
             double eps = 0;
             boolean b = true;
             Double price;
@@ -78,5 +106,6 @@ public class ColumnPE extends Column {
         }
 
         return column_;
+         */
     }
 }

@@ -41,20 +41,17 @@ public class Request {
             data_out_.put("PE", pe.calculateValue());
         }
 
+        if(status_.get("PB")){
+            ColumnPB pb = new ColumnPB(data_in_);
+            data_out_.put("PB", pb.calculateValue());
+        }
+
         System.out.println("Request formed.");
     }
 
     public void getFile(){
-        /*
-        for(int i = 0; i < data_out_.get("Date").size(); i += 1){
-            System.out.println(
-                data_out_.get("Date").get(i) + "   " +
-                data_out_.get("PE").get(i));
-        }
-         */
-
         try{
-            FileWriter fr = new FileWriter("../PE.csv");
+            FileWriter fr = new FileWriter("../data.csv");
 
             List<String> columns = new ArrayList<>();
             Map<String, Integer> indexes = new HashMap<>();
@@ -76,14 +73,12 @@ public class Request {
             fr.write(MessageFormat.format(format_str, columns.toArray()) + "\n");
 
             for(int i = 0; i < data_out_.get("Date").size(); i += 1) {
-                //fr.write(data_out_.get("Date").get(i) + ";" + data_out_.get("PE").get(i) + "\n");
-
                 List<String> line = new ArrayList<>();
 
                 for(String col : columns)
                     line.add(data_out_.get(col).get(i));
 
-                fr.write(MessageFormat.format(format_str, line.toArray()));
+                fr.write(MessageFormat.format(format_str, line.toArray()) + "\n");
                 System.out.println(MessageFormat.format(format_str, line.toArray()));
             }
 
@@ -94,7 +89,5 @@ public class Request {
             System.out.println("Writing file error!");
             e.printStackTrace();
         }
-        // добавить кнопку создания файла
-        // запись данных в файл в указанной директории
     }
 }
