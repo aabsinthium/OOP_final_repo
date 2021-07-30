@@ -13,12 +13,19 @@ public class Gui {
     private JCheckBox roe_listener;
     private JButton form_button;
     private JButton send_button;
+    private JComboBox open_year;
+    private JComboBox close_year;
+    private JComboBox comboBox1;
+    private JLabel ticker_label;
+    private JLabel period_label;
+    private JToggleButton multiple_toggle;
+    private JToggleButton single_toggle;
 
     // добвить кнопку сохранения файла
 
     public Gui() {
         // создание контейнеров для хранения статуса
-        String[] checkboxes = {"PE", "PB", "PS", "CR", "ROE"};
+        String[] checkboxes = {"PE", "PB", "PS", "CR", "ROE", "Multiple", "Single"};
         CheckboxStatus status = new CheckboxStatus(checkboxes);
         Request request = new Request();
 
@@ -54,30 +61,40 @@ public class Gui {
             }
         });
 
-        // UNFINISHED
+        // селектор формы (файл с одной компанией / файл со всеми)
+        multiple_toggle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                status.changeStatus("Multiple");
+                single_toggle.setSelected(!single_toggle.isSelected());
+            }
+        });
+        single_toggle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                status.changeStatus("Single");
+                multiple_toggle.setSelected(!multiple_toggle.isSelected());
+            }
+        });
+
+        // установка селектора в положение Multiple по-умолчанию
+        multiple_toggle.setSelected(true);
+
         // формирование и отправка итогового запроса
         form_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // прописать отправку запроса парсеру на вычисление и формирование таблицы
                 request.formRequest(status.getStatus());
 
-                /*
-                JOptionPane.showMessageDialog(null, pe_status.sendStatus().get("PE"));
-                JOptionPane.showMessageDialog(null, pb_status.sendStatus().get("PB"));
-                JOptionPane.showMessageDialog(null, ps_status.sendStatus().get("PS"));
-                JOptionPane.showMessageDialog(null, cr_status.sendStatus().get("CR"));
-                JOptionPane.showMessageDialog(null, roe_status.sendStatus().get("ROE"));
-                 */
             }
         });
-
         send_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 request.getFile();
             }
         });
+
     }
 
     public static void main(String[] args) {

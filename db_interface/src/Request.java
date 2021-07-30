@@ -19,16 +19,31 @@ public class Request {
         System.out.println("Request created.");
     }
 
+    // определение типа запроса и вызов
     public void formRequest(Map<String, Boolean> status){
-        // вызов при отправке запроса
-        // создание запроса:
-        // подгрузка файлов, парсинг большой таблицы
-        // парсинг требуемых колонок
         this.status_ = status;
+
+        if(status_.get("Multiple")){
+            multipleRequest();
+        }
+        else if(status_.get("Single")){
+            singleRequest();
+        }
+        else{
+            System.out.println("Error while reading status!");
+        }
+    }
+
+    // запрос для всех компаний
+    private void multipleRequest(){
+
+    }
+
+    // запрос для одной компании
+    private void singleRequest(){
         ParserFinancials financials_parser = new ParserFinancials();
         ParserYield yield_parser = new ParserYield();
 
-        // сделать цикл, поставить путь
         financials_parser.read("AAPL");
         yield_parser.read("AAPL");
 
@@ -47,6 +62,7 @@ public class Request {
         }
 
         System.out.println("Request formed.");
+
     }
 
     public void getFile(){
