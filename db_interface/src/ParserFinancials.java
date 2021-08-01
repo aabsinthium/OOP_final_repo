@@ -29,7 +29,7 @@ public class ParserFinancials extends Parser{
         paths[3] = "income-statement/";
 
         for (String folder: paths) { // чтение таблиц
-            String filePath = "../data/" + folder + company + ".csv";
+            String filePath = "././data/" + folder + company + ".csv";
 
             try {
                 File fl = new File(filePath);

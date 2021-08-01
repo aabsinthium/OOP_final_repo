@@ -4,30 +4,30 @@ import java.io.*;
 
 
 public class Request {
-    //private final String path_data_;
-    //private final String path_save_;
+    private List<String> tickers_;
+    private Map<String, String> params_;
     private Map<String, Boolean> status_;
     private Map<String, List<String>> data_in_;
     private Map<String, List<String>> data_out_;
 
     public Request(){
-        //this.path_data_ = path_data; // при создании указывается путь к базе данных, возможно из настроек
-        //this.path_save_ = path_save; // путь к директории для сохранения финального файла
         this.status_ = new HashMap<>();
+        this.params_ = new HashMap<>();
         this.data_in_ = new HashMap<>();
         this.data_out_ = new HashMap<>();
         System.out.println("Request created.");
     }
 
     // определение типа запроса и вызов
-    public void formRequest(Map<String, Boolean> status){
+    public void formRequest(Map<String, Boolean> status, Map<String, String> params){
         this.status_ = status;
+        this.params_ = params;
 
-        if(status_.get("Multiple")){
-            multipleRequest();
+        if(params_.get("Multiple/Single").equals("Multiple")){
+            multipleRequest(params_.get("Open year"), params_.get("Close year"));
         }
-        else if(status_.get("Single")){
-            singleRequest();
+        else if(params_.get("Multiple/Single").equals("Single")){
+            singleRequest(params_.get("Ticker"));
         }
         else{
             System.out.println("Error while reading status!");
@@ -35,17 +35,38 @@ public class Request {
     }
 
     // запрос для всех компаний
-    private void multipleRequest(){
-
-    }
-
-    // запрос для одной компании
-    private void singleRequest(){
+    private void multipleRequest(String open_year, String close_year){
         ParserFinancials financials_parser = new ParserFinancials();
         ParserYield yield_parser = new ParserYield();
 
-        financials_parser.read("AAPL");
-        yield_parser.read("AAPL");
+        for(String ticker : tickers_) {
+            financials_parser.read(ticker);
+            yield_parser.read(ticker);
+
+            DateMerger merger = new DateMerger(financials_parser.getParsed(), yield_parser.getParsed());
+            data_in_ = merger.merge();
+            data_out_.put("Date", data_in_.get("Date"));
+
+            if (status_.get("PE")) {
+                ColumnPE pe = new ColumnPE(data_in_);
+                data_out_.put("PE", pe.calculateValue());
+            }
+
+            if (status_.get("PB")) {
+                ColumnPB pb = new ColumnPB(data_in_);
+                data_out_.put("PB", pb.calculateValue());
+            }
+        }
+        System.out.println("Request formed.");
+    }
+
+    // запрос для одной компании
+    private void singleRequest(String ticker){
+        ParserFinancials financials_parser = new ParserFinancials();
+        ParserYield yield_parser = new ParserYield();
+
+        financials_parser.read(ticker);
+        yield_parser.read(ticker);
 
         DateMerger merger = new DateMerger(financials_parser.getParsed(), yield_parser.getParsed());
         data_in_ = merger.merge();
@@ -62,12 +83,15 @@ public class Request {
         }
 
         System.out.println("Request formed.");
+    }
 
+    private void setTickers(List tickers){
+        this.tickers_ = tickers;
     }
 
     public void getFile(){
         try{
-            FileWriter fr = new FileWriter("../data.csv");
+            FileWriter fr = new FileWriter("././data.csv");
 
             List<String> columns = new ArrayList<>();
             Map<String, Integer> indexes = new HashMap<>();
@@ -81,7 +105,7 @@ public class Request {
                     indexes.put(key, idx);
                     columns.add(key);
                     format_str += ";{" + indexes.get(key) + "}";
-                    idx += 1;
+                    idx++;
                 }
             }
             System.out.println(MessageFormat.format(format_str, columns.toArray()));

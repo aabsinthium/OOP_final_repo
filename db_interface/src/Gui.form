@@ -59,13 +59,6 @@
         </constraints>
         <properties/>
       </component>
-      <component id="fe8e4" class="javax.swing.JComboBox" binding="close_year">
-        <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties/>
-      </component>
       <component id="33a04" class="javax.swing.JButton" binding="form_button">
         <constraints>
           <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -84,20 +77,20 @@
           <text value="Send request"/>
         </properties>
       </component>
-      <component id="90f84" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+      <component id="90f84" class="javax.swing.JComboBox" binding="ticker_box">
         <constraints>
           <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties/>
       </component>
-      <component id="ced1d" class="javax.swing.JLabel" binding="period_label">
+      <component id="ced1d" class="javax.swing.JLabel" binding="open_label">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <text value="Period"/>
+          <text value="Open year"/>
         </properties>
       </component>
       <component id="1c5a9" class="javax.swing.JLabel" binding="ticker_label">
@@ -125,6 +118,22 @@
         </constraints>
         <properties>
           <text value="Single"/>
+        </properties>
+      </component>
+      <component id="fe8e4" class="javax.swing.JComboBox" binding="close_year">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="43865" class="javax.swing.JLabel" binding="close_label">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Close year"/>
         </properties>
       </component>
     </children>

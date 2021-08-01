@@ -15,7 +15,7 @@ public class ParserYield extends Parser{
 
     @Override
     public void read(String company) {
-        String filePath = "../data/yield/prices/" + company + ".csv";
+        String filePath = "././data/yield/prices/" + company + ".csv";
         String regex = "(?<=(,|^)\").[^\"]+(?=\"(,|$))|(?<=,)\\d+\\.?\\d+(?=,)";
 
         try {

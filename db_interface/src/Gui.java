@@ -1,8 +1,12 @@
+import org.w3c.dom.ls.LSException;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.util.*;
 
 public class Gui {
     private JPanel panel1;
@@ -15,25 +19,39 @@ public class Gui {
     private JButton send_button;
     private JComboBox open_year;
     private JComboBox close_year;
-    private JComboBox comboBox1;
+    private JComboBox ticker_box;
     private JLabel ticker_label;
-    private JLabel period_label;
+    private JLabel open_label;
     private JToggleButton multiple_toggle;
     private JToggleButton single_toggle;
-
-    // добвить кнопку сохранения файла
+    private JLabel close_label;
 
     public Gui() {
         // создание контейнеров для хранения статуса
-        String[] checkboxes = {"PE", "PB", "PS", "CR", "ROE", "Multiple", "Single"};
-        CheckboxStatus status = new CheckboxStatus(checkboxes);
+        String[] features = {"PE", "PB", "PS", "CR", "ROE"};
+        String[] parameters = {"Multiple/Single", "Open year", "Close year", "Ticker"};
+        List<String> tickers = new ArrayList<>();
+        Parameters status = new Parameters(features, parameters);
         Request request = new Request();
+
+        List<File> files = Arrays.asList(new File("././data/balance-sheet").listFiles());
+        Collections.sort(files);
+
+        for(File file : files) {
+            ticker_box.addItem(file.getName().substring(0, file.getName().length() - 4));
+            tickers.add(file.getName());
+        }
+
+        for(int i = 2005; i < 2021; i++){
+            open_year.addItem(i);
+            close_year.addItem(i);
+        }
 
         // создание слушателей для чекбоксов
         pe_listener.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                status.changeStatus("PE"); // изменения статуса по нажатию на чекбокс
+                status.changeStatus("PE");
             }
         });
         pb_listener.addItemListener(new ItemListener() {
@@ -65,15 +83,39 @@ public class Gui {
         multiple_toggle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                status.changeStatus("Multiple");
-                single_toggle.setSelected(!single_toggle.isSelected());
+                status.setParam("Multiple/Single", "Multiple");
+                single_toggle.setSelected(!multiple_toggle.isSelected());
             }
         });
         single_toggle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                status.changeStatus("Single");
-                multiple_toggle.setSelected(!multiple_toggle.isSelected());
+                status.setParam("Multiple/Single", "Single");
+                multiple_toggle.setSelected(!single_toggle.isSelected());
+            }
+        });
+
+        // слушатели списков
+        ticker_box.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox)e.getSource();
+                String pv = (String)cb.getSelectedItem();
+                status.setParam("Ticker", pv);
+            }
+        });
+        open_year.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox)e.getSource();
+                status.setParam("Open year", (String)cb.getSelectedItem());
+            }
+        });
+        close_year.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox)e.getSource();
+                status.setParam("Close year", (String)cb.getSelectedItem());
             }
         });
 
@@ -84,7 +126,7 @@ public class Gui {
         form_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                request.formRequest(status.getStatus());
+                request.formRequest(status.getStatus(), status.getParams());
 
             }
         });
@@ -94,7 +136,6 @@ public class Gui {
                 request.getFile();
             }
         });
-
     }
 
     public static void main(String[] args) {
